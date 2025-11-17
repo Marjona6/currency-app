@@ -47,10 +47,10 @@ function CurrencyTable({ selectedCurrencies, conversionData }: CurrencyTableProp
       <Table sx={{ minWidth: 700 }} aria-label="customized table">
         <TableHead>
           <TableRow>
-            <StyledTableCell>{selectedCurrencies[0]}</StyledTableCell>
+            <StyledTableCell>{selectedCurrencies[0].toUpperCase()}</StyledTableCell>
             {selectedCurrencies.slice(1).map((currency) => (
               <StyledTableCell align="right" key={currency}>
-                {currency}
+                {currency.toUpperCase()}
               </StyledTableCell>
             ))}
           </TableRow>
