@@ -6,6 +6,8 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+import TextField from "@mui/material/TextField";
+import { useState } from "react";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -42,6 +44,14 @@ interface CurrencyTableProps {
 }
 
 function CurrencyTable({ selectedCurrencies, conversionData }: CurrencyTableProps) {
+  const [baseAmount, setBaseAmount] = useState<string>("1");
+
+  const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setBaseAmount(e.target.value);
+  };
+
+  const baseAmountNum = parseFloat(baseAmount) || 0;
+
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 700 }} aria-label="customized table">
@@ -58,14 +68,15 @@ function CurrencyTable({ selectedCurrencies, conversionData }: CurrencyTableProp
         <TableBody>
           <StyledTableRow key="conversion-row">
             <StyledTableCell component="th" scope="row">
-              {"1.0000"}
+              <TextField type="number" value={baseAmount} onChange={handleAmountChange} size="small" />
             </StyledTableCell>
             {selectedCurrencies.slice(1).map((currency) => {
               const baseCurrency = selectedCurrencies[0];
               const conversionRate = conversionData && typeof conversionData[baseCurrency] === "object" && (conversionData[baseCurrency] as Record<string, number>)[currency];
+              const convertedAmount = conversionRate ? conversionRate * baseAmountNum : null;
               return (
                 <StyledTableCell align="right" key={currency}>
-                  {conversionRate ? conversionRate.toFixed(8) : "-"}
+                  {convertedAmount !== null ? convertedAmount.toFixed(2) : "-"}
                 </StyledTableCell>
               );
             })}
